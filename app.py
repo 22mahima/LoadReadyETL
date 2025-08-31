@@ -170,7 +170,13 @@ def download_clean_data(session_id):
             clean_df = pd.read_sql_query('SELECT * FROM clean_data', conn)
             
             if clean_df.empty:
-                return jsonify({'error': 'No clean data available'}), 404
+                # If no clean data, provide helpful feedback
+                quarantine_df = pd.read_sql_query('SELECT * FROM quarantine', conn)
+                quarantine_count = len(quarantine_df)
+                
+                return jsonify({
+                    'error': f'No clean data available. All {quarantine_count} records had issues and were quarantined. Please check the data quality report for details on what needs to be fixed in your CSV file.'
+                }), 400
             
             # Remove timestamp column for cleaner export
             if 'created_at' in clean_df.columns:

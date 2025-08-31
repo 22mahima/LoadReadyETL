@@ -38,8 +38,8 @@
         
         <div class="upload-form">
             <h3>Upload CSV Files for Processing</h3>
-            <p><strong>Supported format:</strong> CSV files only (.csv)</p>
-            <p><strong>Expected columns:</strong> id, name, age, salary, department</p>
+            <p><strong>⚠️ IMPORTANT:</strong> Your CSV must have exactly these columns: <strong>id, name, age, salary, department</strong></p>
+            <p><a href="/static/template.csv" download class="btn" style="display: inline; padding: 5px 10px; font-size: 14px;">📥 Download CSV Template</a></p>
             
             <form id="uploadForm" enctype="multipart/form-data">
                 <input type="file" id="fileInput" name="files" multiple accept=".csv" required>
@@ -80,8 +80,8 @@
             </div>
             
             <div id="downloadSection" class="download-section">
-                <h3>💾 Download Clean Data</h3>
-                <p>Your processed data without any issues, ready to use</p>
+                <h3>💾 Download Results</h3>
+                <p id="downloadMessage">Your processed data is ready</p>
                 <button id="downloadCleanBtn" class="btn btn-success">Download Clean CSV File</button>
                 <button id="downloadReportBtn" class="btn">Download Quality Report</button>
             </div>
@@ -154,6 +154,20 @@
             document.getElementById('cleanRecords').textContent = results.summary.clean_records;
             document.getElementById('quarantinedRecords').textContent = results.summary.quarantined_records;
             document.getElementById('successRate').textContent = results.summary.success_rate + '%';
+            
+            // Update download message based on clean data availability
+            const cleanCount = results.summary.clean_records;
+            const downloadMessage = document.getElementById('downloadMessage');
+            const downloadCleanBtn = document.getElementById('downloadCleanBtn');
+            
+            if (cleanCount > 0) {
+                downloadMessage.textContent = `${cleanCount} clean records ready for download`;
+                downloadCleanBtn.style.display = 'inline-block';
+                downloadCleanBtn.textContent = `Download ${cleanCount} Clean Records`;
+            } else {
+                downloadMessage.textContent = 'No clean data available - all records had issues';
+                downloadCleanBtn.style.display = 'none';
+            }
             
             // Display issues found
             displayIssues(results.quarantine_data);
