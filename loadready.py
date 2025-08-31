@@ -448,8 +448,15 @@ class LoadReadyETL:
             with sqlite3.connect(self.db_path) as conn:
                 # Load clean data (replace to avoid constraint conflicts)
                 if not df.empty:
-                    df.to_sql('clean_data', conn, if_exists='replace', index=False)
-                    self.log_step("LOAD", f"Loaded {len(df)} clean rows to database")
+                    # Ensure the table structure matches our data
+                    df.to_sql('clean_data', conn, if_exists='replace', index=False, method='multi')
+                    
+                    # Verify data was saved
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT COUNT(*) FROM clean_data")
+                    actual_count = cursor.fetchone()[0]
+                    
+                    self.log_step("LOAD", f"Loaded {len(df)} clean rows to database (verified: {actual_count} records)")
                 else:
                     self.log_step("LOAD", "No clean data to load", "WARNING")
                 

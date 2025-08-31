@@ -1,0 +1,5 @@
+id,name,age,salary,department,yearly_salary
+1,John Doe,30,5000.0,ENGINEERING,60000.0
+2,Jane Smith,25,4500.0,MARKETING,54000.0
+3,Bob Johnson,35,6000.0,ENGINEERING,72000.0
+4,Alice Brown,28,5200.0,HR,62400.0

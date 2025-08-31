@@ -76,12 +76,23 @@ def upload_files():
         db_path = f'session_db_{session_id}.db'
         log_path = f'session_log_{session_id}.log'
         
-        # Run ETL pipeline
-        etl = LoadReadyETL(db_path=db_path, log_path=log_path, verbose=False)
+        # Run ETL pipeline with debug info
+        etl = LoadReadyETL(db_path=db_path, log_path=log_path, verbose=True)
         etl.run_etl(uploaded_files)
         
-        # Get results from database
+        # Debug: Check if data was actually saved
+        print(f"Debug: Checking database {db_path}")
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM clean_data")
+            clean_count = cursor.fetchone()[0]
+            print(f"Debug: Clean records in database: {clean_count}")
+        
+        # Get results from database  
         results = get_etl_results(db_path)
+        
+        # Store session info for downloads
+        results['session_db_path'] = db_path
         
         # Clean up uploaded files
         for file_path in uploaded_files:
