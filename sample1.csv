@@ -1,0 +1,5 @@
+id,name,age,salary,department
+1,john doe,30,5000.0,engineering
+2,jane smith,25,4500.0,marketing
+3,bob johnson,35,6000.0,engineering
+4,alice brown,28,5200.0,hr

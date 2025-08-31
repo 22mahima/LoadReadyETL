@@ -1,0 +1,5 @@
+id,name,age,salary,department
+8,frank miller,invalid_age,5300.0,sales
+9,,27,4900.0,engineering
+10,grace kelly,31,,hr
+11,henry ford,34,5600.0,

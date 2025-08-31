@@ -1,2 +1,75 @@
+modules = ["python-3.11"]
 [agent]
 expertMode = true
+
+[nix]
+channel = "stable-25_05"
+packages = ["glibcLocales"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "LoadReady ETL Pipeline"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "loadready_test"
+
+[[workflows.workflow]]
+name = "LoadReady ETL Pipeline"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = """
+pip install pandas && python -c \"
+# Create sample CSV files for testing
+import csv
+
+# Sample 1: Valid data
+with open('sample1.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(['id', 'name', 'age', 'salary', 'department'])
+    writer.writerow([1, 'john doe', 30, 5000.0, 'engineering'])
+    writer.writerow([2, 'jane smith', 25, 4500.0, 'marketing'])
+    writer.writerow([3, 'bob johnson', 35, 6000.0, 'engineering'])
+    writer.writerow([4, 'alice brown', 28, 5200.0, 'hr'])
+
+# Sample 2: Contains duplicate
+with open('sample2.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(['id', 'name', 'age', 'salary', 'department'])
+    writer.writerow([5, 'charlie wilson', 32, 5500.0, 'engineering'])
+    writer.writerow([6, 'diana prince', 29, 4800.0, 'marketing'])
+    writer.writerow([7, 'edward norton', 45, 7000.0, 'management'])
+    writer.writerow([1, 'john doe', 30, 5000.0, 'engineering'])  # Duplicate
+
+# Sample 3: Invalid data
+with open('invalid_sample.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(['id', 'name', 'age', 'salary', 'department'])
+    writer.writerow([8, 'frank miller', 'invalid_age', 5300.0, 'sales'])
+    writer.writerow([9, '', 27, 4900.0, 'engineering'])
+    writer.writerow([10, 'grace kelly', 31, '', 'hr'])
+    writer.writerow([11, 'henry ford', 34, 5600.0, ''])
+
+print('Sample CSV files created successfully!')
+\" && python loadready.py sample1.csv sample2.csv invalid_sample.csv --verbose"""
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow]]
+name = "loadready_test"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pip install pandas && echo \"Dependencies installed successfully\""
