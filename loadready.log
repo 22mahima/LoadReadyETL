@@ -1,0 +1,134 @@
+2025-08-31 03:25:42 - LoadReady - INFO - Database initialized successfully
+2025-08-31 03:25:42 - LoadReady - INFO - [PIPELINE] Starting LoadReady ETL Pipeline
+2025-08-31 03:25:42 - LoadReady - INFO - [EXTRACT] Starting extraction from 3 files
+2025-08-31 03:25:42 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample1.csv
+2025-08-31 03:25:42 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample2.csv
+2025-08-31 03:25:42 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from invalid_sample.csv
+2025-08-31 03:25:42 - LoadReady - INFO - [EXTRACT] Extraction completed. Total rows: 12
+2025-08-31 03:25:42 - LoadReady - INFO - [VALIDATE] Starting schema validation
+2025-08-31 03:25:42 - LoadReady - INFO - [VALIDATE] Schema validation completed. Valid: 8, Invalid: 4
+2025-08-31 03:25:42 - LoadReady - INFO - [TRANSFORM] Starting data transformation
+2025-08-31 03:25:42 - LoadReady - INFO - [TRANSFORM] Removed 1 duplicate rows
+2025-08-31 03:25:42 - LoadReady - INFO - [TRANSFORM] Transformation completed. 1 rows removed during cleaning
+2025-08-31 03:25:42 - LoadReady - INFO - [LOAD] Starting data load to database
+2025-08-31 03:25:42 - LoadReady - INFO - [LOAD] Loaded 7 clean rows to database
+2025-08-31 03:25:42 - LoadReady - INFO - [LOAD] Quarantined 4 invalid rows
+2025-08-31 03:25:42 - LoadReady - INFO - [LOAD] Data load completed successfully
+2025-08-31 03:25:42 - LoadReady - INFO - [QUALITY_REPORT] Generating data quality report
+2025-08-31 03:25:42 - LoadReady - INFO - [QUALITY_REPORT] Quality report saved to quality_report_20250831_032542.csv
+2025-08-31 03:25:42 - LoadReady - INFO - [PIPELINE] ETL Pipeline completed successfully in 0.06 seconds
+2025-08-31 03:26:41 - LoadReady - INFO - Database initialized successfully
+2025-08-31 03:26:41 - LoadReady - INFO - [PIPELINE] Starting LoadReady ETL Pipeline
+2025-08-31 03:26:41 - LoadReady - INFO - [EXTRACT] Starting extraction from 3 files
+2025-08-31 03:26:41 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample1.csv
+2025-08-31 03:26:41 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample2.csv
+2025-08-31 03:26:41 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from invalid_sample.csv
+2025-08-31 03:26:41 - LoadReady - INFO - [EXTRACT] Extraction completed. Total rows: 12
+2025-08-31 03:26:41 - LoadReady - INFO - [VALIDATE] Starting schema validation
+2025-08-31 03:26:41 - LoadReady - INFO - [VALIDATE] Schema validation completed. Valid: 8, Invalid: 4
+2025-08-31 03:26:41 - LoadReady - INFO - [TRANSFORM] Starting data transformation
+2025-08-31 03:26:41 - LoadReady - INFO - [TRANSFORM] Removed 1 duplicate rows
+2025-08-31 03:26:41 - LoadReady - INFO - [TRANSFORM] Transformation completed. 1 rows removed during cleaning
+2025-08-31 03:26:41 - LoadReady - INFO - [LOAD] Starting data load to database
+2025-08-31 03:26:41 - LoadReady - ERROR - [LOAD] Error during data load: UNIQUE constraint failed: clean_data.id
+2025-08-31 03:26:41 - LoadReady - ERROR - [PIPELINE] ETL Pipeline failed: UNIQUE constraint failed: clean_data.id
+2025-08-31 03:26:41 - LoadReady - ERROR - [PIPELINE] Stack trace: Traceback (most recent call last):
+  File "/home/runner/workspace/loadready.py", line 494, in run_etl
+    self.load(transformed_df, invalid_rows)
+  File "/home/runner/workspace/loadready.py", line 449, in load
+    df.to_sql('clean_data', conn, if_exists='append', index=False)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/generic.py", line 3106, in to_sql
+    return sql.to_sql(
+           ^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/io/sql.py", line 844, in to_sql
+    return pandas_sql.to_sql(
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/io/sql.py", line 2841, in to_sql
+    return table.insert(chunksize, method)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/io/sql.py", line 1121, in insert
+    num_inserted = exec_insert(conn, keys, chunk_iter)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/io/sql.py", line 2537, in _execute_insert
+    conn.executemany(self.insert_statement(num_rows=1), data_list)
+sqlite3.IntegrityError: UNIQUE constraint failed: clean_data.id
+
+2025-08-31 03:27:17 - LoadReady - INFO - Database initialized successfully
+2025-08-31 03:27:17 - LoadReady - INFO - [PIPELINE] Starting LoadReady ETL Pipeline
+2025-08-31 03:27:17 - LoadReady - INFO - [EXTRACT] Starting extraction from 3 files
+2025-08-31 03:27:17 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample1.csv
+2025-08-31 03:27:17 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample2.csv
+2025-08-31 03:27:17 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from invalid_sample.csv
+2025-08-31 03:27:17 - LoadReady - INFO - [EXTRACT] Extraction completed. Total rows: 12
+2025-08-31 03:27:17 - LoadReady - INFO - [VALIDATE] Starting schema validation
+2025-08-31 03:27:17 - LoadReady - INFO - [VALIDATE] Schema validation completed. Valid: 8, Invalid: 4
+2025-08-31 03:27:17 - LoadReady - INFO - [TRANSFORM] Starting data transformation
+2025-08-31 03:27:17 - LoadReady - INFO - [TRANSFORM] Removed 1 duplicate rows
+2025-08-31 03:27:17 - LoadReady - INFO - [TRANSFORM] Transformation completed. 1 rows removed during cleaning
+2025-08-31 03:27:17 - LoadReady - INFO - [LOAD] Starting data load to database
+2025-08-31 03:27:17 - LoadReady - INFO - [LOAD] Loaded 7 clean rows to database
+2025-08-31 03:27:17 - LoadReady - INFO - [LOAD] Quarantined 4 invalid rows
+2025-08-31 03:27:17 - LoadReady - INFO - [LOAD] Data load completed successfully
+2025-08-31 03:27:17 - LoadReady - INFO - [QUALITY_REPORT] Generating data quality report
+2025-08-31 03:27:17 - LoadReady - INFO - [QUALITY_REPORT] Quality report saved to quality_report_20250831_032717.csv
+2025-08-31 03:27:17 - LoadReady - INFO - [PIPELINE] ETL Pipeline completed successfully in 0.32 seconds
+2025-08-31 03:29:28 - LoadReady - INFO - Database initialized successfully
+2025-08-31 03:29:28 - LoadReady - INFO - [PIPELINE] Starting LoadReady ETL Pipeline
+2025-08-31 03:29:28 - LoadReady - INFO - [EXTRACT] Starting extraction from 3 files
+2025-08-31 03:29:28 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample1.csv
+2025-08-31 03:29:28 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample2.csv
+2025-08-31 03:29:28 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from invalid_sample.csv
+2025-08-31 03:29:28 - LoadReady - INFO - [EXTRACT] Extraction completed. Total rows: 12
+2025-08-31 03:29:28 - LoadReady - INFO - [VALIDATE] Starting schema validation
+2025-08-31 03:29:28 - LoadReady - INFO - [VALIDATE] Schema validation completed. Valid: 8, Invalid: 4
+2025-08-31 03:29:28 - LoadReady - INFO - [TRANSFORM] Starting data transformation
+2025-08-31 03:29:28 - LoadReady - INFO - [TRANSFORM] Removed 1 duplicate rows
+2025-08-31 03:29:28 - LoadReady - INFO - [TRANSFORM] Transformation completed. 1 rows removed during cleaning
+2025-08-31 03:29:28 - LoadReady - INFO - [LOAD] Starting data load to database
+2025-08-31 03:29:29 - LoadReady - INFO - [LOAD] Loaded 7 clean rows to database
+2025-08-31 03:29:29 - LoadReady - INFO - [LOAD] Quarantined 4 invalid rows
+2025-08-31 03:29:29 - LoadReady - INFO - [LOAD] Data load completed successfully
+2025-08-31 03:29:29 - LoadReady - INFO - [QUALITY_REPORT] Generating data quality report
+2025-08-31 03:29:29 - LoadReady - INFO - [QUALITY_REPORT] Quality report saved to quality_report_20250831_032929.csv
+2025-08-31 03:29:29 - LoadReady - INFO - [PIPELINE] ETL Pipeline completed successfully in 0.21 seconds
+2025-08-31 03:29:38 - LoadReady - INFO - Database initialized successfully
+2025-08-31 03:29:38 - LoadReady - INFO - [PIPELINE] Starting LoadReady ETL Pipeline
+2025-08-31 03:29:38 - LoadReady - INFO - [EXTRACT] Starting extraction from 3 files
+2025-08-31 03:29:38 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample1.csv
+2025-08-31 03:29:38 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample2.csv
+2025-08-31 03:29:38 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from invalid_sample.csv
+2025-08-31 03:29:38 - LoadReady - INFO - [EXTRACT] Extraction completed. Total rows: 12
+2025-08-31 03:29:38 - LoadReady - INFO - [VALIDATE] Starting schema validation
+2025-08-31 03:29:38 - LoadReady - INFO - [VALIDATE] Schema validation completed. Valid: 8, Invalid: 4
+2025-08-31 03:29:38 - LoadReady - INFO - [TRANSFORM] Starting data transformation
+2025-08-31 03:29:38 - LoadReady - INFO - [TRANSFORM] Removed 1 duplicate rows
+2025-08-31 03:29:38 - LoadReady - INFO - [TRANSFORM] Transformation completed. 1 rows removed during cleaning
+2025-08-31 03:29:38 - LoadReady - INFO - [LOAD] Starting data load to database
+2025-08-31 03:29:38 - LoadReady - INFO - [LOAD] Loaded 7 clean rows to database
+2025-08-31 03:29:38 - LoadReady - INFO - [LOAD] Quarantined 4 invalid rows
+2025-08-31 03:29:38 - LoadReady - INFO - [LOAD] Data load completed successfully
+2025-08-31 03:29:38 - LoadReady - INFO - [QUALITY_REPORT] Generating data quality report
+2025-08-31 03:29:38 - LoadReady - INFO - [QUALITY_REPORT] Quality report saved to quality_report_20250831_032938.csv
+2025-08-31 03:29:38 - LoadReady - INFO - [PIPELINE] ETL Pipeline completed successfully in 0.17 seconds
+2025-08-31 03:47:52 - LoadReady - INFO - Database initialized successfully
+2025-08-31 03:47:52 - LoadReady - INFO - [PIPELINE] Starting LoadReady ETL Pipeline
+2025-08-31 03:47:52 - LoadReady - INFO - [EXTRACT] Starting extraction from 3 files
+2025-08-31 03:47:52 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample1.csv
+2025-08-31 03:47:52 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from sample2.csv
+2025-08-31 03:47:52 - LoadReady - INFO - [EXTRACT] Successfully extracted 4 rows from invalid_sample.csv
+2025-08-31 03:47:52 - LoadReady - INFO - [EXTRACT] Extraction completed. Total rows: 12
+2025-08-31 03:47:52 - LoadReady - INFO - [VALIDATE] Starting schema validation
+2025-08-31 03:47:52 - LoadReady - INFO - [VALIDATE] Schema validation completed. Valid: 8, Invalid: 4
+2025-08-31 03:47:52 - LoadReady - INFO - [TRANSFORM] Starting data transformation
+2025-08-31 03:47:52 - LoadReady - INFO - [TRANSFORM] Removed 1 duplicate rows
+2025-08-31 03:47:52 - LoadReady - INFO - [TRANSFORM] Transformation completed. 1 rows removed during cleaning
+2025-08-31 03:47:52 - LoadReady - INFO - [LOAD] Starting data load to database
+2025-08-31 03:47:52 - LoadReady - INFO - [LOAD] Loaded 7 clean rows to database
+2025-08-31 03:47:52 - LoadReady - INFO - [LOAD] Quarantined 4 invalid rows
+2025-08-31 03:47:52 - LoadReady - INFO - [LOAD] Data load completed successfully
+2025-08-31 03:47:52 - LoadReady - INFO - [QUALITY_REPORT] Generating data quality report
+2025-08-31 03:47:52 - LoadReady - INFO - [QUALITY_REPORT] Quality report saved to quality_report_20250831_034752.csv
+2025-08-31 03:47:52 - LoadReady - INFO - [PIPELINE] ETL Pipeline completed successfully in 0.13 seconds

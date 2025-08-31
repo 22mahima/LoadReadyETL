@@ -1,0 +1,14 @@
+Metric,Value
+Total Rows,3.0
+Valid Rows,3.0
+Invalid Rows,0.0
+Duplicates Removed,0.0
+Schema Violations,0.0
+Files Processed,1.0
+Files Failed,0.0
+Success Rate (%),100.0
+Missing Values - id,0.0
+Missing Values - name,0.0
+Missing Values - age,0.0
+Missing Values - salary,0.0
+Missing Values - department,0.0

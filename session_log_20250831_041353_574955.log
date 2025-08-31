@@ -1,0 +1,17 @@
+2025-08-31 04:13:53 - LoadReady - INFO - Database initialized successfully
+2025-08-31 04:13:53 - LoadReady - INFO - [PIPELINE] Starting LoadReady ETL Pipeline
+2025-08-31 04:13:53 - LoadReady - INFO - [EXTRACT] Starting extraction from 1 files
+2025-08-31 04:13:53 - LoadReady - INFO - [EXTRACT] Successfully extracted 3 rows from uploads/20250831_041353_template.csv
+2025-08-31 04:13:53 - LoadReady - INFO - [EXTRACT] Extraction completed. Total rows: 3
+2025-08-31 04:13:53 - LoadReady - INFO - [VALIDATE] Starting schema validation
+2025-08-31 04:13:53 - LoadReady - INFO - [VALIDATE] Schema validation completed. Valid: 3, Invalid: 0
+2025-08-31 04:13:53 - LoadReady - INFO - [TRANSFORM] Starting data transformation
+2025-08-31 04:13:53 - LoadReady - INFO - [TRANSFORM] Removed 0 duplicate rows
+2025-08-31 04:13:53 - LoadReady - INFO - [TRANSFORM] Transformation completed. 0 rows removed during cleaning
+2025-08-31 04:13:53 - LoadReady - INFO - [LOAD] Starting data load to database
+2025-08-31 04:13:53 - LoadReady - INFO - [LOAD] Loaded 3 clean rows to database (verified: 3 records)
+2025-08-31 04:13:53 - LoadReady - INFO - [LOAD] No invalid rows to quarantine
+2025-08-31 04:13:53 - LoadReady - INFO - [LOAD] Data load completed successfully
+2025-08-31 04:13:53 - LoadReady - INFO - [QUALITY_REPORT] Generating data quality report
+2025-08-31 04:13:53 - LoadReady - INFO - [QUALITY_REPORT] Quality report saved to quality_report_20250831_041353.csv
+2025-08-31 04:13:53 - LoadReady - INFO - [PIPELINE] ETL Pipeline completed successfully in 0.05 seconds

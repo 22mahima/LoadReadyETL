@@ -1,0 +1,6 @@
+id,name,age,salary,department,yearly_salary
+1,Alice,25,50000,HR,600000
+2,Bob,30,60000,ENGINEERING,720000
+3,Charlie,35,75000,FINANCE,900000
+4,David,40,80000,MARKETING,960000
+5,Eva,28,55000,IT,660000
