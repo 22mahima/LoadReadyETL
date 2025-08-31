@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoadReady ETL Pipeline</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 LoadReady ETL Pipeline</h1>
+            <p>Upload CSV files to process them through our production-ready ETL pipeline</p>
+        </header>
+
+        <div class="upload-section">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="file-upload-area" id="fileUploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>Drop CSV files here or click to browse</h3>
+                    <p>Multiple files supported • Max 16MB per file</p>
+                    <input type="file" id="fileInput" name="files" multiple accept=".csv" style="display: none;">
+                    <button type="button" id="browseBtn" class="btn btn-primary">Choose Files</button>
+                </div>
+                
+                <div id="fileList" class="file-list"></div>
+                
+                <button type="submit" id="processBtn" class="btn btn-success" disabled>
+                    Process Files
+                </button>
+            </form>
+        </div>
+
+        <div id="loadingSection" class="loading-section" style="display: none;">
+            <div class="spinner"></div>
+            <h3>Processing your files...</h3>
+            <p>Running ETL pipeline: Extract → Validate → Transform → Load</p>
+        </div>
+
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <h2>📊 Processing Results</h2>
+            
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Total Processed</h3>
+                    <div class="stat-number" id="totalProcessed">0</div>
+                </div>
+                <div class="card success">
+                    <h3>Clean Records</h3>
+                    <div class="stat-number" id="cleanRecords">0</div>
+                </div>
+                <div class="card warning">
+                    <h3>Quarantined</h3>
+                    <div class="stat-number" id="quarantinedRecords">0</div>
+                </div>
+                <div class="card info">
+                    <h3>Success Rate</h3>
+                    <div class="stat-number" id="successRate">0%</div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('clean')">Clean Data</button>
+                <button class="tab-btn" onclick="showTab('quarantine')">Quarantined Data</button>
+            </div>
+
+            <div class="tab-content">
+                <div id="cleanTab" class="tab-pane active">
+                    <h3>✅ Successfully Processed Records</h3>
+                    <div id="cleanDataTable" class="data-table"></div>
+                </div>
+                
+                <div id="quarantineTab" class="tab-pane">
+                    <h3>⚠️ Quarantined Records</h3>
+                    <p>These records failed validation and require attention</p>
+                    <div id="quarantineDataTable" class="data-table"></div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="downloadReportBtn" class="btn btn-outline">Download Report</button>
+                <button id="processMoreBtn" class="btn btn-primary" onclick="resetInterface()">Process More Files</button>
+            </div>
+        </div>
+
+        <div id="errorSection" class="error-section" style="display: none;">
+            <h3>❌ Processing Error</h3>
+            <p id="errorMessage"></p>
+            <button class="btn btn-primary" onclick="resetInterface()">Try Again</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
