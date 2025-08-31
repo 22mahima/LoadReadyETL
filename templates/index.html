@@ -5,22 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoadReady ETL Pipeline</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
         .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         h1 { color: #333; text-align: center; margin-bottom: 30px; }
         .upload-form { text-align: center; margin-bottom: 30px; }
         input[type="file"] { margin: 20px 0; padding: 10px; border: 2px solid #ddd; border-radius: 5px; width: 100%; }
-        .btn { padding: 15px 30px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        .btn { padding: 15px 30px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin: 10px; }
         .btn:hover { background: #0056b3; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
         #loading { display: none; text-align: center; color: #666; }
         #results { display: none; margin-top: 30px; }
-        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
-        .stat-box { text-align: center; padding: 15px; background: #f8f9fa; border-radius: 5px; }
+        .stats { display: flex; justify-content: space-around; margin: 20px 0; flex-wrap: wrap; }
+        .stat-box { text-align: center; padding: 15px; background: #f8f9fa; border-radius: 5px; margin: 5px; min-width: 120px; }
         .stat-number { font-size: 24px; font-weight: bold; color: #007bff; }
+        .stat-success { color: #28a745; }
+        .stat-warning { color: #ffc107; }
+        .stat-danger { color: #dc3545; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
         th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
         th { background: #007bff; color: white; }
         .error { color: #dc3545; text-align: center; margin: 20px 0; }
+        .issues-section { background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; padding: 20px; margin: 20px 0; }
+        .issue-item { margin: 10px 0; padding: 10px; background: #f8d7da; border-radius: 5px; }
+        .no-issues { color: #28a745; font-weight: bold; }
+        .download-section { text-align: center; margin: 30px 0; padding: 20px; background: #d4edda; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -52,24 +61,40 @@
                     <div>Total Processed</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number" id="cleanRecords">0</div>
+                    <div class="stat-number stat-success" id="cleanRecords">0</div>
                     <div>Clean Records</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number" id="quarantinedRecords">0</div>
-                    <div>Quarantined</div>
+                    <div class="stat-number stat-warning" id="quarantinedRecords">0</div>
+                    <div>Issues Found</div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-number" id="successRate">0%</div>
                     <div>Success Rate</div>
                 </div>
             </div>
+
+            <div id="issuesSection" class="issues-section">
+                <h3>🔍 Data Quality Issues</h3>
+                <div id="issuesList"></div>
+            </div>
             
-            <h3>✅ Clean Data</h3>
-            <div id="cleanDataTable"></div>
+            <div id="downloadSection" class="download-section">
+                <h3>💾 Download Clean Data</h3>
+                <p>Your processed data without any issues, ready to use</p>
+                <button id="downloadCleanBtn" class="btn btn-success">Download Clean CSV File</button>
+                <button id="downloadReportBtn" class="btn">Download Quality Report</button>
+            </div>
             
-            <h3>⚠️ Quarantined Data</h3>
-            <div id="quarantineDataTable"></div>
+            <details style="margin: 30px 0;">
+                <summary style="cursor: pointer; font-weight: bold; margin-bottom: 15px;">📋 View Data Details</summary>
+                
+                <h4>✅ Clean Data</h4>
+                <div id="cleanDataTable"></div>
+                
+                <h4>⚠️ Records with Issues</h4>
+                <div id="quarantineDataTable"></div>
+            </details>
             
             <button class="btn" onclick="location.reload()">Process More Files</button>
         </div>
@@ -78,6 +103,8 @@
     </div>
 
     <script>
+        let currentSessionId = null;
+
         document.getElementById('uploadForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -108,6 +135,7 @@
                 const result = await response.json();
                 
                 if (result.success) {
+                    currentSessionId = result.session_id;
                     displayResults(result.results);
                 } else {
                     showError(result.error);
@@ -127,11 +155,43 @@
             document.getElementById('quarantinedRecords').textContent = results.summary.quarantined_records;
             document.getElementById('successRate').textContent = results.summary.success_rate + '%';
             
-            // Display clean data
-            displayTable('cleanDataTable', results.clean_data);
+            // Display issues found
+            displayIssues(results.quarantine_data);
             
-            // Display quarantine data
+            // Setup download buttons
+            document.getElementById('downloadCleanBtn').onclick = () => downloadCleanData();
+            document.getElementById('downloadReportBtn').onclick = () => downloadReport();
+            
+            // Display data tables
+            displayTable('cleanDataTable', results.clean_data);
             displayTable('quarantineDataTable', results.quarantine_data);
+        }
+        
+        function displayIssues(quarantineData) {
+            const issuesList = document.getElementById('issuesList');
+            
+            if (!quarantineData || quarantineData.length === 0) {
+                issuesList.innerHTML = '<p class="no-issues">🎉 No issues found! All data is clean and ready to use.</p>';
+                return;
+            }
+            
+            let html = `<p><strong>${quarantineData.length} records had issues and were quarantined:</strong></p>`;
+            
+            // Group issues by type
+            const issueTypes = {};
+            quarantineData.forEach(row => {
+                const reason = row.error_reason;
+                if (!issueTypes[reason]) {
+                    issueTypes[reason] = 0;
+                }
+                issueTypes[reason]++;
+            });
+            
+            Object.entries(issueTypes).forEach(([issue, count]) => {
+                html += `<div class="issue-item">• <strong>${issue}</strong> (${count} record${count > 1 ? 's' : ''})</div>`;
+            });
+            
+            issuesList.innerHTML = html;
         }
         
         function displayTable(containerId, data) {
@@ -153,13 +213,29 @@
             data.forEach(row => {
                 html += '<tr>';
                 columns.forEach(col => {
-                    html += `<td>${row[col] || ''}</td>`;
+                    let value = row[col] || '';
+                    if (col === 'salary' || col === 'yearly_salary') {
+                        value = typeof value === 'number' ? '$' + value.toLocaleString() : value;
+                    }
+                    html += `<td>${value}</td>`;
                 });
                 html += '</tr>';
             });
             
             html += '</tbody></table>';
             container.innerHTML = html;
+        }
+        
+        function downloadCleanData() {
+            if (currentSessionId) {
+                window.open(`/download_clean/${currentSessionId}`, '_blank');
+            }
+        }
+        
+        function downloadReport() {
+            if (currentSessionId) {
+                window.open(`/download_report/${currentSessionId}`, '_blank');
+            }
         }
         
         function showError(message) {

@@ -146,6 +146,34 @@ def download_report(session_id):
     except Exception as e:
         return jsonify({'error': f'Failed to download report: {str(e)}'}), 500
 
+@app.route('/download_clean/<session_id>')
+def download_clean_data(session_id):
+    """Download clean data as CSV for a session."""
+    try:
+        db_path = f'session_db_{session_id}.db'
+        
+        if not os.path.exists(db_path):
+            return jsonify({'error': 'Session data not found'}), 404
+        
+        with sqlite3.connect(db_path) as conn:
+            clean_df = pd.read_sql_query('SELECT * FROM clean_data', conn)
+            
+            if clean_df.empty:
+                return jsonify({'error': 'No clean data available'}), 404
+            
+            # Remove timestamp column for cleaner export
+            if 'created_at' in clean_df.columns:
+                clean_df = clean_df.drop('created_at', axis=1)
+            
+            # Create temporary CSV file
+            temp_file = f'clean_data_{session_id}.csv'
+            clean_df.to_csv(temp_file, index=False)
+            
+            return send_file(temp_file, as_attachment=True, download_name=f'clean_data_{session_id}.csv')
+            
+    except Exception as e:
+        return jsonify({'error': f'Failed to download clean data: {str(e)}'}), 500
+
 @app.route('/health')
 def health_check():
     """Health check endpoint."""
