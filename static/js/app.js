@@ -2,54 +2,27 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('fileInput');
-    const fileUploadArea = document.getElementById('fileUploadArea');
-    const fileList = document.getElementById('fileList');
-    const browseBtn = document.getElementById('browseBtn');
     const processBtn = document.getElementById('processBtn');
     const uploadForm = document.getElementById('uploadForm');
-    
-    let selectedFiles = [];
-
-    // File upload area click handler
-    fileUploadArea.addEventListener('click', function() {
-        fileInput.click();
-    });
-
-    // Browse button click handler
-    browseBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        fileInput.click();
-    });
-
-    // Drag and drop handlers
-    fileUploadArea.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        fileUploadArea.classList.add('dragover');
-    });
-
-    fileUploadArea.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        fileUploadArea.classList.remove('dragover');
-    });
-
-    fileUploadArea.addEventListener('drop', function(e) {
-        e.preventDefault();
-        fileUploadArea.classList.remove('dragover');
-        
-        const files = Array.from(e.dataTransfer.files);
-        handleFiles(files);
-    });
-
-    // File input change handler
-    fileInput.addEventListener('change', function(e) {
-        const files = Array.from(e.target.files);
-        console.log('Files selected:', files.length);
-        handleFiles(files);
-    });
 
     // Form submit handler
     uploadForm.addEventListener('submit', function(e) {
         e.preventDefault();
+        
+        const files = fileInput.files;
+        if (files.length === 0) {
+            alert('Please select at least one CSV file.');
+            return;
+        }
+        
+        // Check if all files are CSV
+        for (let file of files) {
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                alert('Only CSV files are allowed.');
+                return;
+            }
+        }
+        
         processFiles();
     });
 
@@ -127,11 +100,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show loading state
             showSection('loading');
             
-            // Prepare form data
+            // Prepare form data directly from file input
             const formData = new FormData();
-            selectedFiles.forEach(file => {
+            const files = fileInput.files;
+            
+            for (let file of files) {
                 formData.append('files', file);
-            });
+            }
             
             // Send files to backend
             const response = await fetch('/upload', {
