@@ -1,0 +1,52 @@
+I want you to generate a complete Python ETL pipeline project called LoadReady. The pipeline should be production-ready, modular, and interview-friendly. Please generate one single Python file (loadready.py) that includes all the following features:
+Features:
+1. Extract
+Read raw data from CSV files (support multiple files as input arguments).
+Handle missing, empty, or corrupted files gracefully.
+2. Schema Validation
+Define an expected schema (column names and types). Example:
+expected_schema = {
+    "id": int,
+    "name": str,
+    "age": int,
+    "salary": float,
+    "department": str
+}
+Validate each row against the schema.
+Store invalid rows in a quarantine table in SQLite.
+Log schema errors with row numbers and reasons.
+3. Transform / Clean Data
+Remove duplicate rows based on id.
+Handle missing values (drop or fill with default).
+Standardize text fields (capitalize names, unify department codes).
+Convert numeric fields to correct types.
+Optionally calculate derived fields (e.g., yearly salary = monthly salary × 12).
+4. Data Quality Report
+Generate summary metrics:
+Total rows, valid rows, invalid rows
+Missing values per column
+Duplicates removed
+Rows failing schema validation or transformation rules
+Save report as CSV and print a console-friendly table.
+5. Load
+Insert clean rows into a SQLite database (loadready.db).
+Store invalid rows in a separate quarantine table.
+Create tables automatically if they don’t exist.
+6. Logging
+Maintain a log file (loadready.log) with timestamps and levels (INFO, WARNING, ERROR).
+Log every ETL step and any errors encountered.
+7. Command-line Usage
+Users should be able to run:
+python loadready.py file1.csv file2.csv --verbose
+--verbose should print logs to console.
+8. Coding Style
+Modular functions: extract(), validate_schema(), transform(), generate_quality_report(), load(), log_step().
+Use Pandas for data manipulation.
+Include detailed comments explaining each function.
+Handle exceptions gracefully.
+9. Sample Data
+Include 1–2 small CSV examples in comments or instructions.
+10. Deliverable
+One fully working loadready.py script with all above features.
+Ready to run on local machine with pip install pandas sqlite3.
+Please write clean, readable, production-style Python code that I can use to demo the pipeline in interviews and include all key ETL steps, logging, schema validation, and quality report generation.
