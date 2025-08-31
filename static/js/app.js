@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // File input change handler
     fileInput.addEventListener('change', function(e) {
         const files = Array.from(e.target.files);
+        console.log('Files selected:', files.length);
         handleFiles(files);
     });
 
@@ -53,6 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function handleFiles(files) {
+        console.log('Handling files:', files.length);
+        
         // Filter for CSV files only
         const csvFiles = files.filter(file => file.name.toLowerCase().endsWith('.csv'));
         
@@ -60,7 +63,13 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Only CSV files are allowed. Some files were ignored.');
         }
         
+        if (csvFiles.length === 0) {
+            alert('Please select at least one CSV file.');
+            return;
+        }
+        
         selectedFiles = csvFiles;
+        console.log('CSV files selected:', selectedFiles.length);
         displayFileList();
         updateProcessButton();
     }
@@ -91,7 +100,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateProcessButton() {
-        processBtn.disabled = selectedFiles.length === 0;
+        const hasFiles = selectedFiles.length > 0;
+        processBtn.disabled = !hasFiles;
+        
+        if (hasFiles) {
+            processBtn.textContent = `Process ${selectedFiles.length} File${selectedFiles.length > 1 ? 's' : ''}`;
+            processBtn.classList.remove('btn-disabled');
+        } else {
+            processBtn.textContent = 'Process Files';
+            processBtn.classList.add('btn-disabled');
+        }
+        
+        console.log(`Files selected: ${selectedFiles.length}, Button disabled: ${processBtn.disabled}`);
     }
 
     function formatFileSize(bytes) {

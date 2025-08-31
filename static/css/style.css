@@ -116,10 +116,16 @@ header p {
     box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
 }
 
-.btn-success:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    transform: none;
+.btn-success:disabled,
+.btn-disabled {
+    background: #ccc !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    opacity: 0.6;
+}
+
+.btn-success:not(:disabled):not(.btn-disabled) {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
 
 .btn-outline {
